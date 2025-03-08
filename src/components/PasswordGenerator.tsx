@@ -1,6 +1,7 @@
 import usePasswordStore from "../store.ts";
 import { useEffect, useState } from "react";
 import Modal from "./Modal.tsx";
+import Input from "./Input.tsx";
 
 const PasswordGenerator = () => {
   const {
@@ -18,26 +19,33 @@ const PasswordGenerator = () => {
     generatePassword,
   } = usePasswordStore();
 
-  // Modal'ın açık olup olmadığını kontrol eden state
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleGeneratePassword = () => {
-    generatePassword(); // Şifreyi oluştur
-    setIsModalOpen(true); // Şifre oluşturulduktan sonra modal'ı aç
+    if (length <= 3) return;
+    generatePassword();
+    setIsModalOpen(true);
   };
 
   const [isDisable, setIsDisable] = useState(false);
 
   useEffect(() => {
     setIsDisable(
-      !(
-        includeNumbers ||
-        includeSymbols ||
-        includeUpperCases ||
-        includeLowerCases
-      ),
+      length <= 3 ||
+        !(
+          includeNumbers ||
+          includeSymbols ||
+          includeUpperCases ||
+          includeLowerCases
+        ),
     );
-  }, [includeNumbers, includeSymbols, includeUpperCases, includeLowerCases]);
+  }, [
+    includeNumbers,
+    includeSymbols,
+    includeUpperCases,
+    includeLowerCases,
+    length,
+  ]);
 
   return (
     <div>
@@ -48,10 +56,10 @@ const PasswordGenerator = () => {
             htmlFor="length"
             className="block text-sm font-medium text-gray-600"
           >
-            Password Length
+            Set Password Length :
           </label>
           <input
-            className="border-2 rounded-lg p-1 "
+            className="input"
             type="number"
             id="length"
             value={length}
@@ -61,38 +69,26 @@ const PasswordGenerator = () => {
           />
         </div>
         <div className="flex flex-col space-y-3 mt-3 ">
-          <div className="flex items-center  ">
-            <input
-              type="checkbox"
-              checked={includeNumbers}
-              onChange={toggleNumbers}
-            />
-            <label className="ml-2 text-sm">Include Number </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={includeSymbols}
-              onChange={toggleSymbols}
-            />
-            <label className="ml-2 text-sm">Include Symbol</label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={includeUpperCases}
-              onChange={toggleUpperCases}
-            />
-            <label className="ml-2 text-sm">Include UpperCases</label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={includeLowerCases}
-              onChange={toggleLowerCases}
-            />
-            <label className="ml-2 text-sm">Include LowerCases</label>
-          </div>
+          <Input
+            title="Include UpperCases"
+            checked={includeUpperCases}
+            onChange={toggleUpperCases}
+          />{" "}
+          <Input
+            title="Include Number"
+            checked={includeNumbers}
+            onChange={toggleNumbers}
+          />{" "}
+          <Input
+            title="Include Symbols"
+            checked={includeSymbols}
+            onChange={toggleSymbols}
+          />
+          <Input
+            title="Include LowerCases"
+            checked={includeLowerCases}
+            onChange={toggleLowerCases}
+          />
         </div>
         <button
           disabled={isDisable}

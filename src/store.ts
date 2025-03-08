@@ -15,7 +15,7 @@ type PasswordState = {
   generatePassword: () => void;
 };
 const usePasswordStore = create<PasswordState>((set) => ({
-  length: 12,
+  length: 0,
   includeNumbers: false,
   includeSymbols: false,
   includeUpperCases: true,
