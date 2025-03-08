@@ -1,11 +1,11 @@
-import { useState } from "react";
-
-import "./App.css";
+import PasswordGenerator from "./components/PasswordGenerator.tsx";
 
 function App() {
   return (
     <>
-      <div></div>
+      <div className="h-screen flex items-center justify-center 0 ">
+        <PasswordGenerator />
+      </div>
     </>
   );
 }
